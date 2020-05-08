@@ -84,6 +84,7 @@ public class Admin_Entertainment_Controller {
      * @param entertainment
      * @param bindingResult
      */
+    @RequestMapping("/update")
     public JSONObject update(@Valid Entertainment entertainment,@Valid Message message,  BindingResult bindingResult,
                              HttpServletResponse response,
                              HttpServletRequest request){

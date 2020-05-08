@@ -4,12 +4,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.repository.query.Param;
+
 import com.java456.entity.Bank;
 import com.java456.entity.Message;
+import com.java456.entity.MessageType;
 
 
 public interface MessageService {
-	 public void update(Message message);
+	public void update(Message message);
 
 	public List<Message> findAllMovies();   
 	public List<Message> findAllTravel();  
@@ -19,6 +22,7 @@ public interface MessageService {
 	public List<Message> findAllFood();
     public List<Message> seachMessage(String source);
     public List<Message> searchNewMessages();
+    public List<Message> selectMessages(String source,Integer message_type_id);
     
     /**
      * @param map

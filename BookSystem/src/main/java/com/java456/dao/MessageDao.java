@@ -12,7 +12,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.java456.entity.Bank;
+import com.java456.entity.Food;
 import com.java456.entity.Message;
+import com.java456.entity.MessageType;
 
 
 public interface MessageDao extends JpaRepository<Message, Integer>, JpaSpecificationExecutor<Message> {
@@ -32,12 +34,15 @@ public interface MessageDao extends JpaRepository<Message, Integer>, JpaSpecific
     public  List<Message> findAllEntertainm();   
     @Query(value = "SELECT * FROM t_message WHERE message_type_id=6 ", nativeQuery = true)
     public  List<Message> findAllTraffic(); 
-    //@Transactional
-    //@Modifying
-   // @Query(value="UPDATE t_message SET price=:price where order_no=:Order_No",nativeQuery=false)
-    //public void updateMessage(@Param("message")Message message);
+	@Query(value="select * from t_message where message_type_id=3 order by price ",nativeQuery = true)
+	public List<Message> FoodOrderByPrice();
+
 	@Query(value="select * from t_message  where source like CONCAT('%',:source,'%')",nativeQuery=true)
-    List<Message> seachMessage(@Param("source") String source);;
+    List<Message> seachMessage(@Param("source") String source);
+	@Transactional
+	@Modifying
+	@Query(value="select * from t_message  where message_type_id=?1 and source like CONCAT('%',?2,'%') order by create_date_time  ",nativeQuery=true)
+	List<Message> selectMessages(@Param("message_type_id")Integer message_type_id,@Param("source") String source);
     @Query(value="select * from t_message  order by create_date_time ",nativeQuery=true)
     List<Message> searchNewMessage();	
 }

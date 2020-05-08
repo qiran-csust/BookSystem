@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.java456.dao.MessageDao;
 import com.java456.entity.Bank;
 import com.java456.entity.Message;
+import com.java456.entity.MessageType;
 import com.java456.entity.User;
 
 @Service(value = "messageService")
@@ -111,7 +112,10 @@ public class MessageServiceImpl implements MessageService{
 		// TODO Auto-generated method stub
 		return messageDao.findAllTraffic();
 	}
-	
+	@Override
+	public List<Message> selectMessages(String source, Integer message_type_id) {
+		return messageDao.selectMessages(message_type_id, source);
+	}
 	
 	
 	 @Override
@@ -146,5 +150,6 @@ public class MessageServiceImpl implements MessageService{
 	        });
 	        return count;
 	    }
+
 
 }

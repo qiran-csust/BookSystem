@@ -94,6 +94,37 @@
 			}
 		},'json');
 	}
+	//智能排序
+	function Sorting(){
+		w = 600;
+		h = 500;
+		checkWindow();
+		//iframe层
+		layer.open({
+		  type: 2,
+		  title: '智能排序',
+		  shadeClose:false,
+		  shade: 0.8,
+		  area: [w+'px', h+'px'],
+		  content: '/houtai/bank/sort' //iframe的url
+		});
+	}
+
+	//筛选
+	function select(){
+		w = 600;
+		h = 500;
+		checkWindow();
+		//iframe层
+		layer.open({
+		  type: 2,
+		  title: '筛选查询',
+		  shadeClose:false,
+		  shade: 0.8,
+		  area: [w+'px', h+'px'],
+		  content: '/houtai/bank/select' //iframe的url
+		});
+	}
 </script>
 
 <body style="padding-top: 3px;">
@@ -104,6 +135,8 @@
 		<button onclick="add()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>添加</button>
 		<button onclick="delSelected()" class="layui-btn layui-btn-sm layui-btn-danger permission_block" style="display: none"><i class="layui-icon">&#xe640;</i>删除</button>
 		<button class="layui-btn layui-btn-sm" onclick="reload_data()"><i class="layui-icon">&#xe669;</i>刷新</button>
+		<button onclick="Sorting()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>智能排序</button>
+	    <button onclick="select()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>筛选</button>
 	</div>
 </div>
 
