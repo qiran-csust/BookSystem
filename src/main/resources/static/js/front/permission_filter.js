@@ -8,23 +8,6 @@
 *   而若是管理员访问详情页面，则将所有的功能性操作显示出来。
 * */
 
-/*
-$.ready(function () {
-    // 页面加载完成后执行下面定义的内容
-    $.post("/user/getUser", {}, function (result) {
-        if(result.roleId ==2){
-            // 访问用户是普通用户
-            $(".permission_block").style.display = "none";
-        }else if (result.roleId ==1) {
-            // 访问用户是管理员
-
-        }else {
-            // 当前用户登录状态已失效,提示用户，并跳转到登录页面
-
-        }
-    }, "json");
-});*/
-
 function getUser() {
     // 页面加载完成后执行下面定义的内容
     $.post("/user/getUser", {"key": "key"}, function (result) {
@@ -34,7 +17,6 @@ function getUser() {
         } else if (result.roleId == 1) {
             // 访问用户是管理员,展示功能性按钮
             $(".permission_block").show();
-
         } else {
             // 当前用户登录状态已失效,提示用户，并跳转到登录页面
             window.location.href = "/login";

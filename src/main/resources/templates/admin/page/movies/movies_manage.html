@@ -17,84 +17,97 @@
 </head>
 
 <script>
-//定义在外面。可以代码中  使用 table
-var table;
-layui.use([ 'laydate', 'laypage', 'layer','form', 'table', 'carousel',
-			'upload', 'element' ], function() {
-	table = layui.table;
-});
-
-var global_ids;
-var global_ids_len;
-
-var w ;//窗口的宽
-var h ;//窗口的高
-
-//添加
-function add(){
-	w = 600;
-	h = 500;
-	checkWindow();
-	//iframe层
-	layer.open({
-	  type: 2,
-	  title: '添加',
-	  shadeClose:false,
-	  shade: 0.8,
-	  area: [w+'px', h+'px'],
-	  content: '/houtai/movies/add' //iframe的url
+	//定义在外面。可以代码中  使用 table
+	var table;
+	layui.use([ 'laydate', 'laypage', 'layer','form', 'table', 'carousel',
+				'upload', 'element' ], function() {
+		table = layui.table;
 	});
-}
 
-//打开编辑窗口
-function edit(id){
-	w = 600;
-	h = 500;
-	checkWindow();
-	layer.open({
-	  type: 2,
-	  title: '修改',
-	  shadeClose: false,
-	  shade: 0.8,
-	  area: [w+'px', h+'px'],
-	  content: '/houtai/movies/edit?id='+id //iframe的url
-	});
-}
+	var global_ids;
+	var global_ids_len;
 
-//子窗口调用 的  关闭窗口方法 
-function closeDlg(msg){
-	 layer.closeAll();
-	 layer.msg(msg);
-	 reload_data();
-}
+	var w ;//窗口的宽
+	var h ;//窗口的高
 
-//相当前刷新  重新加载
-function reload_data(){
-  table.reload('table', {
-		where: {
-	     },page: {curr: 1 //重新从第 1 页开始
-				}
-    });
-}
+	//添加
+	function add(){
+		w = 600;
+		h = 500;
+		checkWindow();
+		//iframe层
+		layer.open({
+		  type: 2,
+		  title: '添加',
+		  shadeClose:false,
+		  shade: 0.8,
+		  area: [w+'px', h+'px'],
+		  content: '/houtai/movies/add' //iframe的url
+		});
+	}
+
+	//打开编辑窗口
+	function edit(id){
+		w = 600;
+		h = 500;
+		checkWindow();
+		layer.open({
+		  type: 2,
+		  title: '修改',
+		  shadeClose: false,
+		  shade: 0.8,
+		  area: [w+'px', h+'px'],
+		  content: '/houtai/movies/edit?id='+id //iframe的url
+		});
+	}
+
+	//子窗口调用 的  关闭窗口方法
+	function closeDlg(msg){
+		 layer.closeAll();
+		 layer.msg(msg);
+		 reload_data();
+	}
+
+	//相当前刷新  重新加载
+	function reload_data(){
+	  table.reload('table', {
+			where: {
+			 },page: {curr: 1 //重新从第 1 页开始
+					}
+		});
+	}
 
 
-//  delSelected()     5     2,25,6,5
-function del(ids){
-	var index = layer.load(1, {
-		  shade: [0.1,'#fff'] //0.1透明度的白色背景
-	});
-	$.post('/admin/movies/delete',{ids:ids},function(result){
-		if(result.success){
-			layer.closeAll();
-			layer.msg('删除成功');
-			reload_data();
-		}else{
-			layer.closeAll();
-			layer.alert('删除失败:'+result.msg);
-		}
-	},'json');
-}
+	//  delSelected()     5     2,25,6,5
+	function del(ids){
+		var index = layer.load(1, {
+			  shade: [0.1,'#fff'] //0.1透明度的白色背景
+		});
+		$.post('/admin/movies/delete',{ids:ids},function(result){
+			if(result.success){
+				layer.closeAll();
+				layer.msg('删除成功');
+				reload_data();
+			}else{
+				layer.closeAll();
+				layer.alert('删除失败:'+result.msg);
+			}
+		},'json');
+	}
 
+	// 添加收藏/取消收藏
+	function greatOper(elem, id) {
+		// 添加收藏
+		$.post("/admin/great/info/addGreat", {"couponsId": id}, function (result) {
+			if(result.success){
+				// 收藏成功
+				layer.msg("收藏成功！");
+			}else{
+				// 收藏失败
+				layer.msg("收藏失败， 请稍后再试！");
+			}
+		}, "json");
+	}
 
 </script>
 
@@ -112,10 +125,14 @@ function del(ids){
 <table class="layui-hide"   id="table" lay-filter="table"></table>
 </body>
 
+<script type="text/html" id="great_bar">
+	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="great">收藏</a>
+</script>
+
 <script type="text/html" id="table_bar">
-<div class="layui-btn-group">
-	<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-</div>
+	<div class="layui-btn-group">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+	</div>
 </script>
 
 <script type="text/html" id="format_type">
@@ -139,6 +156,7 @@ function del(ids){
 		,{field:'createDateTime', title: '创建时间', width:140 ,style:'font-size: 12px;'}
 		,{field:'updateDateTime', title: '修改时间', width:140 ,style:'font-size: 12px;'}
 
+		,{fixed:'right', width:120,title: '收藏',  toolbar: '#great_bar'}
 		,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
 	];
 		layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
@@ -169,6 +187,9 @@ function del(ids){
 					, layEvent = obj.event; //获得 lay-event 对应的值
 					if (layEvent === 'edit') {
 						edit(data.id);
+					}else if(layEvent === 'great'){
+						let elem = obj.tr;
+						greatOper(elem, data.id);
 					}
 				});
 				

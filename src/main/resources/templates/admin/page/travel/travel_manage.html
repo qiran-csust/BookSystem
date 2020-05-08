@@ -95,7 +95,19 @@ function del(ids){
 	},'json');
 }
 
-
+// 添加收藏/取消收藏
+function greatOper(elem, id) {
+	// 添加收藏
+	$.post("/admin/great/info/addGreat", {"couponsId": id}, function (result) {
+		if(result.success){
+			// 收藏成功
+			layer.msg("收藏成功！");
+		}else{
+			// 收藏失败
+			layer.msg("收藏失败， 请稍后再试！");
+		}
+	}, "json");
+}
 </script>
 
 <body style="padding-top: 3px;">
@@ -112,10 +124,14 @@ function del(ids){
 <table class="layui-hide"   id="table" lay-filter="table"></table>
 </body>
 
+<script type="text/html" id="great_bar">
+	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="great">收藏</a>
+</script>
+
 <script type="text/html" id="table_bar">
-<div class="layui-btn-group">
-	<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-</div>
+	<div class="layui-btn-group">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+	</div>
 </script>
 
 <script type="text/html" id="format_type">
@@ -139,6 +155,7 @@ function del(ids){
 		,{field:'createDateTime', title: '创建时间', width:140 ,style:'font-size: 12px;'}
 		,{field:'updateDateTime', title: '修改时间', width:140 ,style:'font-size: 12px;'}
 
+		,{fixed:'right', width:120,title: '收藏',  toolbar: '#great_bar'}
 		,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
 	];
 		layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
@@ -169,6 +186,9 @@ function del(ids){
 					, layEvent = obj.event; //获得 lay-event 对应的值
 					if (layEvent === 'edit') {
 						edit(data.id);
+					}else if(layEvent === 'great'){
+						let elem = obj.tr;
+						greatOper(elem, data.id);
 					}
 				});
 				
