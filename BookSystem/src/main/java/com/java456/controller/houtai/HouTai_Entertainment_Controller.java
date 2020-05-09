@@ -67,7 +67,7 @@ public class HouTai_Entertainment_Controller {
         	entertainment.setSource(ss.getSource());
         	entertainment.setPrice(ss.getPrice());
         	entertainment.setUrlString(ss.getUrlString());
-        	entertainment.setOrderNo(ss.getId());
+        	entertainment.setOrderNo(ss.getOrderNo());
         	if(data.size() == 300) {
         		entertainmentDao.saveAll(data);
                 data.clear();

@@ -65,7 +65,7 @@ public class HouTai_Travel_Controller {
         	travel.setSource(ss.getSource());
         	travel.setPrice(ss.getPrice());
         	travel.setUrlString(ss.getUrlString());
-        	travel.setOrderNo(ss.getId());
+        	travel.setOrderNo(ss.getOrderNo());
         	if(data.size() == 300) {
         		travelDao.saveAll(data);
                 data.clear();
