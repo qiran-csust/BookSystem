@@ -15,7 +15,26 @@
 
 <script>
     // 加载多个表格中的数据
-
+    window.onload = function () {
+         function load() {
+            let tables = document.getElementsByClassName('focusTable');
+            for (let i = 0; i < tables.length; i++) {
+                let tb = $(tables[i]);
+                let typeId = tb.attr('typeId');
+                $.post('/admin/focus/info/list', {'typeId': typeId}, function (messageList) {
+                    let messages = messageList.messageList;
+                    for (let j=0; j<messages.length; j++) {
+                        let message = messages[j];
+                        let tr = "<tr><td>"+message.id+"</td><td>"+message.orderNo+"</td><td>"+message.addrString+"</td><td>"+message.price+"</td><td>"+message.messageType.name+"</td>" +
+                            "<td>"+message.source+"</td><td>"+message.urlString+"</td><td>"+message.imageUrl+"</td><td>"+message.createDateTime+"</td><td>"+message.updateDateTime+"</td></tr>";
+                        tb.append(tr);
+                    }
+                }, 'json');
+                setTimeout(1000);
+            }
+        }
+        load();
+    };
 </script>
 
 <body style="padding-top: 3px;">
@@ -39,19 +58,20 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>人物</th>
-                        <th>民族</th>
-                        <th>出场时间</th>
-                        <th>格言</th>
+                        <th>ID</th>
+                        <th>排序号</th>
+                        <th>地址信息</th>
+                        <th>价格</th>
+                        <th>类型</th>
+                        <th>来源</th>
+                        <th>网页地址</th>
+                        <th>优惠图片</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
                     </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>贤心</td>
-                    <td>汉族</td>
-                    <td>1989-10-14</td>
-                    <td>人生似修行</td>
-                </tr>
+
                 </tbody>
             </table>
         </div>

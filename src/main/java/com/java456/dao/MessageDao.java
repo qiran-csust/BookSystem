@@ -53,7 +53,7 @@ public interface MessageDao extends JpaRepository<Message, Integer>, JpaSpecific
     List<Message> selectGreatMessageByPaged(Integer userId, Integer startIndex, Integer pageSize);
 
     // 加载最近指定类型最近的优惠信息
-    @Query(value = "select * from t_message where create_date_time message_type_id = ?1 and between ?2 and ?3", nativeQuery = true)
+    @Query(value = "select * from t_message where message_type_id = ?1 and create_date_time between ?2 and ?3", nativeQuery = true)
     List<Message> selectNewMessage(Integer typeId, String startTime, String currTime);
 
 
