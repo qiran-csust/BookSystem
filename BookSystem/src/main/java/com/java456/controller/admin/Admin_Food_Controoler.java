@@ -174,6 +174,7 @@ public class Admin_Food_Controoler {
 
 		for (int i = 0; i < idsStr.length; i++) {
 			foodDao.deleteById(Integer.parseInt(idsStr[i]));
+            messageDao.deleteById(Integer.parseInt(idsStr[i])); 
 		}
 		result.put("success", true);
 		return result;

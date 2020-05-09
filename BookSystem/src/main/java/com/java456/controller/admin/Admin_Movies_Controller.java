@@ -167,6 +167,7 @@ public class Admin_Movies_Controller {
 
         for (int i = 0; i < idsStr.length; i++) {
             moviesDao.deleteById(Integer.parseInt(idsStr[i]));
+            messageDao.deleteById(Integer.parseInt(idsStr[i])); 
         }
         result.put("success", true);
         return result;
