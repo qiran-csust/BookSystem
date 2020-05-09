@@ -11,4 +11,7 @@ public interface GreatInfoDao extends JpaRepository<GreatInfo, Integer>, JpaSpec
 
     @Query(value = "select * from t_great_info where coupons_id = ?1 and user_id = ?2", nativeQuery = true)
     GreatInfo selectByCouponIdUserId(Integer couponId, Integer userId);
+
+    @Query(value = "select count(id) from t_great_info where user_id =?1", nativeQuery = true)
+    long getTotalNumberByUserId(Integer userId);
 }

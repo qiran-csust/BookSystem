@@ -1,8 +1,10 @@
 package com.java456.controller.admin;
 
 import com.java456.entity.GreatInfo;
+import com.java456.entity.Message;
 import com.java456.entity.User;
 import com.java456.service.GreatInfoService;
+import com.java456.service.MessageService;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/admin/great/info")
@@ -18,6 +23,8 @@ public class Admin_GreatInfo_Controller {
 
     @Resource
     private GreatInfoService greatInfoService;
+    @Resource
+    private MessageService messageService;
 
     /**
      *
@@ -72,4 +79,21 @@ public class Admin_GreatInfo_Controller {
         return result;
     }
 
+    /**
+     * /admin/great/info/list
+     * 获取收藏的优惠信息
+     */
+    @RequestMapping(value = "/list")
+    public Map<String, Object> list(Integer page, Integer limit){
+        Map<String, Object> map = new HashMap<>();
+        // 根据用户id和typeID获取关注信息
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+        List<Message> messageList = messageService.selectGreatMessageByPaged(user.getId(), page, limit);
+        long total = greatInfoService.getTotalNumberByUserId(user.getId());
+        map.put("data", messageList);
+        map.put("count", total);
+        map.put("code", 0);
+        map.put("msg", "");
+        return map;
+    }
 }

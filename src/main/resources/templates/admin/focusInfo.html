@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的关注</title>
+
+    <div th:include="/common/layui"></div>
+    <div th:include="/common/jq"></div>
+
+    <!--添加 layui 自己的 css js  支持加载-->
+    <link href="/css/houtai/manage_base.css" rel="stylesheet" />
+    <script	src="/js/houtai/manage_base.js"></script>
+    <!--添加 layui 自己的 css js  支持加载-->
+</head>
+
+<script>
+    // 加载多个表格中的数据
+
+</script>
+
+<body style="padding-top: 3px;">
+
+<div style="margin: 30px 50px;">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>我的关注</legend>
+    </fieldset>
+
+    <!--关注内容显示-->
+    <div class="layui-card" th:each="focusInfo: ${focusInfoList}">
+        <div class="layui-card-header" th:text="${focusInfo.messageType.name}"></div>
+        <div class="layui-card-body">
+            <table class="layui-table focusTable" th:attr="typeId=${focusInfo.messageType.id}" lay-skin="line">
+                <colgroup>
+                    <col width="150">
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>人物</th>
+                        <th>民族</th>
+                        <th>出场时间</th>
+                        <th>格言</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>贤心</td>
+                    <td>汉族</td>
+                    <td>1989-10-14</td>
+                    <td>人生似修行</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

@@ -10,4 +10,6 @@ public interface GreatInfoService {
     GreatInfo getGreatInfoById(Integer id);
 
     GreatInfo selectByCouponIdUserId(Integer couponId, Integer userId);
+
+    long getTotalNumberByUserId(Integer userId);
 }

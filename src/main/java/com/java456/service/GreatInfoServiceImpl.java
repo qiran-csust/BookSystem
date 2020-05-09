@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class GreatInfoServiceImpl implements GreatInfoService {
@@ -40,5 +41,12 @@ public class GreatInfoServiceImpl implements GreatInfoService {
     @Override
     public GreatInfo selectByCouponIdUserId(Integer couponId, Integer userId) {
         return greatInfoDao.selectByCouponIdUserId(couponId, userId);
+    }
+
+    // 获取收藏优惠信息的总数
+    @Override
+    public long getTotalNumberByUserId(Integer userId) {
+        long count = greatInfoDao.getTotalNumberByUserId(userId);
+        return count;
     }
 }

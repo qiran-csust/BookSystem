@@ -25,7 +25,11 @@ public interface MessageService {
      * @param page  从0开始
      * @param pageSize
      */
-    public List<Message> list(Map<String,Object> map, Integer page, Integer pageSize);
+    List<Message> list(Map<String,Object> map, Integer page, Integer pageSize);
 
-    public Long getTotal(Map<String,Object> map);
+    Long getTotal(Map<String,Object> map);
+
+    List<Message> selectGreatMessageByPaged(Integer userId, Integer pageIndex, Integer pageSize);
+
+	List<Message> selectNewMessage(Integer typeId, Integer days);
 }
