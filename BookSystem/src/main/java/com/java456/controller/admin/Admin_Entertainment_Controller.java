@@ -2,13 +2,18 @@ package com.java456.controller.admin;
 
 import com.java456.dao.EntertainmentDao;
 import com.java456.dao.MessageDao;
+import com.java456.dao.UserHistoryDao;
 import com.java456.entity.Entertainment;
 import com.java456.entity.Message;
 import com.java456.entity.MessageType;
+import com.java456.entity.User;
+import com.java456.entity.UserHistory;
 import com.java456.service.EntertainmentService;
 import com.java456.service.MessageService;
 
 import net.sf.json.JSONObject;
+
+import org.apache.shiro.SecurityUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +41,8 @@ public class Admin_Entertainment_Controller {
     private MessageDao messageDao;
     @Resource
     private MessageService messageService;
+    @Resource
+    private UserHistoryDao userHistoryDao;
     /**
      *  /admin/entertainment/add
      * @param entertainment
@@ -85,7 +92,8 @@ public class Admin_Entertainment_Controller {
      * @param bindingResult
      */
     @RequestMapping("/update")
-    public JSONObject update(@Valid Entertainment entertainment,@Valid Message message,  BindingResult bindingResult,
+    public JSONObject update(@Valid Entertainment entertainment,@Valid Message message,  
+    		@Valid UserHistory userHistory,BindingResult bindingResult,
                              HttpServletResponse response,
                              HttpServletRequest request){
         JSONObject res = new JSONObject();
@@ -108,6 +116,25 @@ public class Admin_Entertainment_Controller {
             messageType.setId(5);
             message.setMessageType(messageType);
             messageService.update(message);
+            
+            List<Integer> list = userHistoryDao.findUserHistories();
+            Integer count=0;
+            int time=1;
+            for(Integer integer:list) 
+            {
+            	if (time<message.getMessageType().getId()&&integer!=null) {
+            		time++;
+            		count=integer+count;
+            	}
+            }
+            System.out.print(count);
+            User user =(User)SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+            userHistory.setId(count+message.getOrderNo());
+            userHistory.setUserId(user.getId());
+            userHistory.setSkimDateTime(new Date());
+            userHistory.setMessage(message);
+            userHistoryDao.save(userHistory);  
+            
             res.put("success", true);
             res.put("msg", "修改成功");
         }

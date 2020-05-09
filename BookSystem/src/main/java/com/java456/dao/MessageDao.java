@@ -45,5 +45,6 @@ public interface MessageDao extends JpaRepository<Message, Integer>, JpaSpecific
 	List<Message> selectMessages(@Param("message_type_id")Integer message_type_id,@Param("source") String source);
     @Query(value="select * from t_message  order by create_date_time ",nativeQuery=true)
     List<Message> searchNewMessage();	
+
 }
 
