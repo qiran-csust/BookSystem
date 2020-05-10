@@ -54,27 +54,27 @@ $(function(){
 	<div style="padding: 10px;" class="layui-form layui-form-pane" action="">
 		
 		<div class="layui-form-item">
-			<label class="layui-form-label">交通编号</label>
+			<label class="layui-form-label">图书编号</label>
 			<div class="layui-input-block">
-				<input type="text"  v-model="bianhao" th:value="${traffic?.bianhao}"  autocomplete="off"
-					placeholder="请输入 交通编号" class="layui-input">
+				<input type="text"  v-model="bianhao" th:value="${book?.bianhao}"  autocomplete="off"
+					placeholder="请输入 图书编号" class="layui-input">
 			</div>
 		</div>
 		
 		
 		<div class="layui-form-item">
-			<label class="layui-form-label">交通名称</label>
+			<label class="layui-form-label">图书名称</label>
 			<div class="layui-input-block">
-				<input type="text"  v-model="name" th:value="${traffic?.name}"  autocomplete="off"
-					placeholder="请输入  交通名称" class="layui-input">
+				<input type="text"  v-model="name" th:value="${book?.name}"  autocomplete="off"
+					placeholder="请输入  图书名称" class="layui-input">
 			</div>
 		</div>
 		
 		 <div class="layui-form-item">
-		    <label class="layui-form-label">交通类型</label>
+		    <label class="layui-form-label">图书类型</label>
 		    <div class="layui-input-block">
 		      <select id="bookTypeId"  >
-		        <option th:value="${trafficType.id}"  th:text="${trafficType.name}"  th:each="trafficType: ${trafficTypeList}"></option>
+		        <option th:value="${bookType.id}"  th:text="${bookType.name}"  th:each="bookType: ${bookTypeList}"></option>
 		      </select>
 		    </div>
 		</div>
@@ -82,28 +82,28 @@ $(function(){
 		<div class="layui-form-item">
 			<label class="layui-form-label">作者</label>
 			<div class="layui-input-block">
-				<input type="text"  v-model="author" th:value="${traffic?.author}"  autocomplete="off"
+				<input type="text"  v-model="author" th:value="${book?.author}"  autocomplete="off"
 					placeholder="请输入  作者" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">单价</label>
 			<div class="layui-input-block">
-				<input type="text"  v-model="danjia" th:value="${traffic?.danjia}"  autocomplete="off"
+				<input type="text"  v-model="danjia" th:value="${book?.danjia}"  autocomplete="off"
 					placeholder="请输入  单价" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">出版社</label>
 			<div class="layui-input-block">
-				<input type="text"  v-model="press" th:value="${traffic?.press}"  autocomplete="off"
+				<input type="text"  v-model="press" th:value="${book?.press}"  autocomplete="off"
 					placeholder="请输入  出版社" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">数量</label>
 			<div class="layui-input-block">
-				<input type="text"  v-model="num" th:value="${traffic?.num}"  autocomplete="off"
+				<input type="text"  v-model="num" th:value="${book?.num}"  autocomplete="off"
 					placeholder="请输入  数量" class="layui-input">
 			</div>
 		</div>
@@ -111,7 +111,7 @@ $(function(){
 		<div class="layui-form-item">
 			<label class="layui-form-label">排序号</label>
 			<div class="layui-input-block">
-				<input type="text"  v-model="orderNo" th:value="${traffic?.orderNo}"  autocomplete="off"
+				<input type="text"  v-model="orderNo" th:value="${book?.orderNo}"  autocomplete="off"
 					placeholder="请输入  排序号" class="layui-input">
 			</div>
 		</div>

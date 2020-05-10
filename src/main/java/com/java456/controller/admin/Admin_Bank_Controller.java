@@ -2,15 +2,26 @@ package com.java456.controller.admin;
 
 import com.java456.dao.BankDao;
 import com.java456.dao.MessageDao;
+import com.java456.dao.UserHistoryDao;
 import com.java456.entity.Bank;
+import com.java456.entity.BankType;
 import com.java456.entity.Message;
 import com.java456.entity.MessageType;
+import com.java456.entity.User;
+import com.java456.entity.UserHistory;
 import com.java456.service.BankService;
 import com.java456.service.MessageService;
+import com.java456.service.UserHistoryService;
 
 import net.sf.json.JSONObject;
 
+import org.apache.shiro.SecurityUtils;
+import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
 import org.hibernate.type.NTextType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
+
+import java.nio.channels.SeekableByteChannel;
+import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +54,13 @@ public class Admin_Bank_Controller {
     private MessageDao messageDao;
     @Resource
     private MessageService messageService;
+    @Resource
+    private UserHistoryDao userHistoryDao;
+    @Resource
+    private UserHistoryService userHistoryService;
     /**
      * /admin/bank/add
-     * @param bank
+     * @param banks
      * @param bindingResult
      * @param response
      * @param request
@@ -84,8 +104,12 @@ public class Admin_Bank_Controller {
      * /admin/bank/update
      */
     @RequestMapping("/update")
-    public JSONObject update(@Valid Bank bank,@Valid Message message,  BindingResult bindingResult, HttpServletResponse response,
-                             HttpServletRequest request){
+    public JSONObject update(@Valid Bank bank,@Valid Message message,
+    		@Valid UserHistory userHistory,
+    		@RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "limit", required = false) Integer limit,
+    		BindingResult bindingResult, HttpServletResponse response,
+                             HttpServletRequest request,HttpSession session){
         JSONObject result = new JSONObject();
         if(bindingResult.hasErrors()){
             result.put("success", false);
@@ -93,6 +117,7 @@ public class Admin_Bank_Controller {
         }else{
             bank.setUpdateDateTime(new Date());
             bankService.update(bank);
+            
             message.setUpdateDateTime(new Date());
             message.setOrderNo(bank.getOrderNo());
             message.setAddrString(bank.getAddrString());
@@ -105,6 +130,24 @@ public class Admin_Bank_Controller {
             messageType.setId(4);
             message.setMessageType(messageType);
             messageService.update(message);
+            
+            List<Integer> list = userHistoryDao.findUserHistories();
+            Integer count=0;
+            int time=1;
+            for(Integer integer:list) 
+            {
+            	if (time<message.getMessageType().getId()&&integer!=null) {
+            		time++;
+            		count=integer+count;
+            	}
+            }
+            System.out.print(count);
+            User user =(User)SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+            userHistory.setId(count+message.getOrderNo());
+            userHistory.setUserId(user.getId());
+            userHistory.setSkimDateTime(new Date());
+            userHistory.setMessage(message);
+            userHistoryDao.save(userHistory);  
             result.put("success", true);
             result.put("msg", "更新成功");
         }

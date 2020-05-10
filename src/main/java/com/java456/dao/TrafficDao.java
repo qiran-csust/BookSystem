@@ -1,6 +1,9 @@
 package com.java456.dao;
 
 import com.java456.entity.Traffic;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -8,4 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface TrafficDao extends JpaRepository<Traffic, Integer>, JpaSpecificationExecutor<Traffic> {
     @Query(value = "select * from t_traffic where id = ?1", nativeQuery = true)
     public Traffic findId(Integer id);
+	@Query(value="select * from t_traffic order by price ",nativeQuery = true)
+	public List<Traffic> TrafficOrderByPrice();
 }

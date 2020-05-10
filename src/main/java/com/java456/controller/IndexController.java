@@ -29,12 +29,14 @@ import com.java456.dao.MenuDao;
 import com.java456.dao.MessageDao;
 import com.java456.dao.MessageTypeDao;
 import com.java456.dao.RoleMenuDao;
+import com.java456.dao.UserHistoryDao;
 import com.java456.entity.BookType;
 import com.java456.entity.Menu;
 import com.java456.entity.Message;
 import com.java456.entity.MessageType;
 import com.java456.entity.RoleMenu;
 import com.java456.entity.User;
+import com.java456.entity.UserHistory;
 import com.java456.service.MenuService;
 import com.java456.util.BrowserUtil;
 import net.sf.json.JSONArray;
@@ -58,6 +60,8 @@ public class IndexController {
 	private MessageDao messageDao;
 	@Resource
 	private MessageTypeDao messageTypeDao;
+	@Resource
+	private UserHistoryDao userHistoryDao;
 	/**
 	 *# 请求首页  
 	 */
@@ -228,6 +232,23 @@ public class IndexController {
 		mav.addObject("userList", userList);
 		mav.addObject("title", "查询数据");
 		mav.setViewName("/admin/newMessage");
+		return mav;
+	}
+	@RequestMapping("/admin/history")
+	public ModelAndView history_main(HttpServletResponse  res,HttpServletRequest req,HttpSession session) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		String UserAgent = req.getHeader("User-Agent");
+		//判断AppleWebKit 和  Firefox    
+		if(BrowserUtil.checkUserAgent(UserAgent)){
+			mav.setViewName("/admin/newMessage");
+		}else{
+			mav.setViewName("/common/s_mode");
+		}
+        User user =(User)SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+        List<UserHistory> userList =userHistoryDao.findHistory(user.getId());
+		mav.addObject("userList", userList);
+		mav.addObject("title", "浏览历史");
+		mav.setViewName("/admin/history");
 		return mav;
 	}
 	
