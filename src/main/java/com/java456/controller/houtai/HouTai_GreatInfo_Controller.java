@@ -9,10 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/houtai/great/info")
 public class HouTai_GreatInfo_Controller {
 
-
-
     @GetMapping(value = "greatInfo")
-    public ModelAndView greatInfo(){
+    public ModelAndView greatInfo() {
         ModelAndView mav = new ModelAndView();
 
         mav.setViewName("/admin/greatInfo");

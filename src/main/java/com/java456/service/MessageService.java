@@ -31,5 +31,14 @@ public interface MessageService {
      */
     public List<Message> list(Map<String,Object> map, Integer page, Integer pageSize);
 
-    public Long getTotal(Map<String,Object> map);
+	Long getTotal(Map<String,Object> map);
+
+	List<Message> selectGreatMessageByPaged(Integer userId, Integer pageIndex, Integer pageSize);
+
+	/**
+	 *	查询指定类型最新的优惠信息
+	 * @param typeId	类型的id
+	 * @param days		表示是最近多少天的优惠信息。比如：days=2,这表示最近两天的优惠信息
+	 */
+	List<Message> selectNewMessage(Integer typeId, Integer days);
 }

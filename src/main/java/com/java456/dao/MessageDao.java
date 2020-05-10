@@ -44,7 +44,20 @@ public interface MessageDao extends JpaRepository<Message, Integer>, JpaSpecific
 	@Query(value="select * from t_message  where message_type_id=?1 and source like CONCAT('%',?2,'%') order by create_date_time  ",nativeQuery=true)
 	List<Message> selectMessages(@Param("message_type_id")Integer message_type_id,@Param("source") String source);
     @Query(value="select * from t_message  order by create_date_time ",nativeQuery=true)
-    List<Message> searchNewMessage();	
+    List<Message> searchNewMessage();
+
+    /**
+     * 获取用户收藏的优惠信息
+     * @param userId
+     * @param startIndex
+     * @param pageSize
+     */
+    @Query(value = "select t.* from t_great_info g, t_message t where g.user_id = ?1 and g.coupons_id = t.id limit ?2, ?3", nativeQuery = true)
+    List<Message> selectGreatMessageByPaged(Integer userId, Integer startIndex, Integer pageSize);
+
+    // 加载最近指定类型最近的优惠信息
+    @Query(value = "select * from t_message where message_type_id = ?1 and create_date_time between ?2 and ?3", nativeQuery = true)
+    List<Message> selectNewMessage(Integer typeId, String startTime, String currTime);
 
 }
 

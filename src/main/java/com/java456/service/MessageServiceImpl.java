@@ -1,5 +1,7 @@
 package com.java456.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import java.util.List;
@@ -150,6 +152,40 @@ public class MessageServiceImpl implements MessageService{
 	        });
 	        return count;
 	    }
+
+	/**
+	 * 获取用户收藏的优惠券信息
+	 * @param userId
+	 * @param pageIndex
+	 * @param pageSize
+	 */
+	@Override
+	public List<Message> selectGreatMessageByPaged(Integer userId, Integer pageIndex, Integer pageSize) {
+		int startIndex = (pageIndex - 1) * pageSize;
+		List<Message> messages = messageDao.selectGreatMessageByPaged(userId, startIndex, pageSize);
+		return messages;
+	}
+
+	/**
+	 * 查询指定类型，最新的优惠信息
+	 * @param typeId    类型的id
+	 * @param days      时间范围，最近几天的
+	 */
+	@Override
+	public List<Message> selectNewMessage(Integer typeId, Integer days) {
+		// 获取当前时间和前days天的日期对象
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String currTime = sdf.format(calendar.getTimeInMillis());
+
+		// 设置时间对象为前days天的时间对象
+		calendar.add(Calendar.DAY_OF_MONTH, -days);
+		String startTime = sdf.format(calendar.getTimeInMillis());
+
+		List<Message> messages = messageDao.selectNewMessage(typeId, startTime, currTime);
+
+		return messages;
+	}
 
 
 }
