@@ -11,7 +11,7 @@
 	<link href="/css/houtai/manage_base.css" rel="stylesheet" />
 	<script src="/jq/jquery_2_1.min.js"></script>
 	<script src="/js/front/permission_filter.js"></script>
-	<script	src="/js/houtai/manage_base.js"></script>
+	<script	src="/static/js/houtai/manage_base.js"></script>
 <!--添加 layui 自己的 css js  支持加载-->
 
 </head>
@@ -167,7 +167,8 @@ function del(ids){
 			, carousel = layui.carousel //轮播
 			, upload = layui.upload //上传
 			, element = layui.element; //元素操作
-
+			
+				
 				
 			  table.render({
 			    elem: '#table'
@@ -192,14 +193,14 @@ function del(ids){
 					}
 				});
 				
-			//监听单元格编辑
-			  table.on('edit(table)', function(obj){
-				var value = obj.value //得到修改后的值
-				,data = obj.data //得到所在行所有键值
-				,field = obj.field; //得到字段  orderNo  name
-				//layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-				table_edit_update(data.id,field,value);
-			  });
+				//监听单元格编辑
+				  table.on('edit(table)', function(obj){
+				    var value = obj.value //得到修改后的值
+				    ,data = obj.data //得到所在行所有键值
+				    ,field = obj.field; //得到字段  orderNo  name
+				    //layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+				    table_edit_update(data.id,field,value);
+				  });
 				
 		});
 </script>

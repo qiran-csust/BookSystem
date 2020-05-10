@@ -1,23 +1,17 @@
 package com.java456.controller.admin;
 import com.java456.entity.FocusInfo;
-import com.java456.entity.Message;
 import com.java456.entity.MessageType;
 import com.java456.entity.User;
 import com.java456.service.FocusInfoService;
-import com.java456.service.MessageService;
 import com.java456.service.MessageTypeService;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
-import org.hibernate.annotations.Synchronize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 优惠类型关注的controller
@@ -30,8 +24,6 @@ public class Admin_FocusInfo_Controller {
     private MessageTypeService messageTypeService;
     @Resource
     private FocusInfoService focusInfoService;
-    @Resource
-    private MessageService messageService;
 
     /**
      * 判断指定类型的优惠信息是否被当前用户关注
@@ -114,18 +106,4 @@ public class Admin_FocusInfo_Controller {
 
         return result;
     }
-
-    /**
-     * 获取指定类型最新的优惠信息
-     *  /admin/focus/info/list
-     * @param typeId 类型的id
-     */
-    @RequestMapping(value = "/list")
-    public Map<String, Object> list(Integer typeId){
-        Map<String, Object> map = new HashMap<>();
-        List<Message> messageList = messageService.selectNewMessage(typeId, 10);
-        map.put("messageList", messageList);
-        return map;
-    }
-
 }

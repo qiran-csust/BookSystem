@@ -94,20 +94,38 @@ function del(ids){
 		}
 	},'json');
 }
-
-// 添加收藏/取消收藏
-function greatOper(elem, id) {
-	// 添加收藏
-	$.post("/admin/great/info/addGreat", {"couponsId": id}, function (result) {
-		if(result.success){
-			// 收藏成功
-			layer.msg("收藏成功！");
-		}else{
-			// 收藏失败
-			layer.msg("收藏失败， 请稍后再试！");
-		}
-	}, "json");
+//智能排序
+function Sorting(){
+	w = 600;
+	h = 500;
+	checkWindow();
+	//iframe层
+	layer.open({
+	  type: 2,
+	  title: '智能排序',
+	  shadeClose:false,
+	  shade: 0.8,
+	  area: [w+'px', h+'px'],
+	  content: '/houtai/travel/sort' //iframe的url
+	});
 }
+
+//筛选
+function select(){
+	w = 600;
+	h = 500;
+	checkWindow();
+	//iframe层
+	layer.open({
+	  type: 2,
+	  title: '筛选查询',
+	  shadeClose:false,
+	  shade: 0.8,
+	  area: [w+'px', h+'px'],
+	  content: '/houtai/travel/select' //iframe的url
+	});
+}
+
 </script>
 
 <body style="padding-top: 3px;">
@@ -118,20 +136,18 @@ function greatOper(elem, id) {
 		<button onclick="add()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>添加</button>
 		<button onclick="delSelected()" class="layui-btn layui-btn-sm layui-btn-danger permission_block" style="display: none"><i class="layui-icon">&#xe640;</i>删除</button>
 	    <button class="layui-btn layui-btn-sm" onclick="reload_data()"><i class="layui-icon">&#xe669;</i>刷新</button>
+	     <button onclick="Sorting()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>智能排序</button>
+	    <button onclick="select()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>筛选</button>
  	 </div>
 </div>
 
 <table class="layui-hide"   id="table" lay-filter="table"></table>
 </body>
 
-<script type="text/html" id="great_bar">
-	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="great">收藏</a>
-</script>
-
 <script type="text/html" id="table_bar">
-	<div class="layui-btn-group">
-		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-	</div>
+<div class="layui-btn-group">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+</div>
 </script>
 
 <script type="text/html" id="format_type">
@@ -155,7 +171,6 @@ function greatOper(elem, id) {
 		,{field:'createDateTime', title: '创建时间', width:140 ,style:'font-size: 12px;'}
 		,{field:'updateDateTime', title: '修改时间', width:140 ,style:'font-size: 12px;'}
 
-		,{fixed:'right', width:120,title: '收藏',  toolbar: '#great_bar'}
 		,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
 	];
 		layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
@@ -186,9 +201,6 @@ function greatOper(elem, id) {
 					, layEvent = obj.event; //获得 lay-event 对应的值
 					if (layEvent === 'edit') {
 						edit(data.id);
-					}else if(layEvent === 'great'){
-						let elem = obj.tr;
-						greatOper(elem, data.id);
 					}
 				});
 				

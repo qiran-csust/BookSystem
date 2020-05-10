@@ -7,18 +7,25 @@ import com.java456.dao.MessageTypeDao;
 import com.java456.entity.Bank;
 import com.java456.entity.Entertainment;
 import com.java456.entity.EntertainmentType;
+import com.java456.entity.Food;
+import com.java456.entity.FoodType;
 import com.java456.entity.Message;
+import com.java456.entity.MessageType;
 import com.java456.service.EntertainmentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,7 +67,7 @@ public class HouTai_Entertainment_Controller {
         	entertainment.setSource(ss.getSource());
         	entertainment.setPrice(ss.getPrice());
         	entertainment.setUrlString(ss.getUrlString());
-        	entertainment.setOrderNo(ss.getId());
+        	entertainment.setOrderNo(ss.getOrderNo());
         	if(data.size() == 300) {
         		entertainmentDao.saveAll(data);
                 data.clear();
@@ -123,4 +130,48 @@ public class HouTai_Entertainment_Controller {
         mav.setViewName("/admin/page/entertainment/add_update");
         return mav;
     }
+    /**
+	 * /houtai/food/sort
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/sort")
+	public ModelAndView sort() throws Exception {
+		ModelAndView mav = new ModelAndView();
+		List<Entertainment> userList =entertainmentDao.EntertainmentOrderByPrice();
+		Pageable pageable=new PageRequest(0,100, Sort.Direction.ASC,"orderNo");
+		Page<EntertainmentType> list = entertainmentTypeDao.findAll(pageable);
+		List<EntertainmentType> EntertainmentTypeList = list.getContent();//拿到list集合
+		mav.addObject("TypeList", EntertainmentTypeList);
+		mav.addObject("userList", userList);
+		mav.addObject("title", "排序");
+		mav.setViewName("/admin/Sort");
+		return mav;
+
+	}
+	/**
+	 * /houtai/food/select
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/select")
+	public ModelAndView select(Model model,HttpServletResponse  res,HttpServletRequest req,HttpSession session) throws Exception
+	{
+		ModelAndView mav = new ModelAndView();
+		String source=req.getParameter("source");	//获取html页面搜索框的值
+		Integer message_type_id=5;
+		List<Message> userList =messageDao.selectMessages(message_type_id, source);
+		Pageable pageable=new PageRequest(0,100, Sort.Direction.ASC,"orderNo");
+		Page<MessageType> list = messageTypeDao.findAll(pageable);
+		List<MessageType> MessageTypeList = list.getContent();//拿到list集合
+		model.addAttribute("type","entertainment");
+		mav.addObject("MessageTypeList", MessageTypeList);
+		mav.addObject("userList", userList);
+		mav.addObject("title", "选择查询");
+		mav.setViewName("/admin/select");
+		return mav;
+
+	}
+    
+    
 }

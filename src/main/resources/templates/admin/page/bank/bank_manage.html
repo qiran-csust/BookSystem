@@ -77,6 +77,7 @@
 		});
 	}
 
+
 	//  delSelected()     5     2,25,6,5
 	function del(ids){
 		var index = layer.load(1, {
@@ -93,19 +94,36 @@
 			}
 		},'json');
 	}
+	//智能排序
+	function Sorting(){
+		w = 600;
+		h = 500;
+		checkWindow();
+		//iframe层
+		layer.open({
+		  type: 2,
+		  title: '智能排序',
+		  shadeClose:false,
+		  shade: 0.8,
+		  area: [w+'px', h+'px'],
+		  content: '/houtai/bank/sort' //iframe的url
+		});
+	}
 
-	// 添加收藏/取消收藏
-	function greatOper(elem, id) {
-		// 添加收藏
-		$.post("/admin/great/info/addGreat", {"couponsId": id}, function (result) {
-			if(result.success){
-				// 收藏成功
-				layer.msg("收藏成功！");
-			}else{
-				// 收藏失败
-				layer.msg("收藏失败， 请稍后再试！");
-			}
-		}, "json");
+	//筛选
+	function select(){
+		w = 600;
+		h = 500;
+		checkWindow();
+		//iframe层
+		layer.open({
+		  type: 2,
+		  title: '筛选查询',
+		  shadeClose:false,
+		  shade: 0.8,
+		  area: [w+'px', h+'px'],
+		  content: '/houtai/bank/select' //iframe的url
+		});
 	}
 </script>
 
@@ -117,20 +135,18 @@
 		<button onclick="add()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>添加</button>
 		<button onclick="delSelected()" class="layui-btn layui-btn-sm layui-btn-danger permission_block" style="display: none"><i class="layui-icon">&#xe640;</i>删除</button>
 		<button class="layui-btn layui-btn-sm" onclick="reload_data()"><i class="layui-icon">&#xe669;</i>刷新</button>
+		<button onclick="Sorting()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>智能排序</button>
+	    <button onclick="select()"  class="layui-btn layui-btn-sm permission_block" style="display: none"><i class="layui-icon">&#xe654;</i>筛选</button>
 	</div>
 </div>
 
-<table class="layui-hide" id="table" lay-filter="table">
-
-</table>
+<table class="layui-hide"   id="table" lay-filter="table"></table>
 </body>
 
-<script type="text/html" id="great_bar">
-	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="great">收藏</a>
-</script>
-
 <script type="text/html" id="table_bar">
-	<a class="layui-btn layui-btn-xs permission_block" lay-event="edit">修改</a>
+	<div class="layui-btn-group">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+	</div>
 </script>
 
 <script type="text/html" id="format_type">
@@ -154,7 +170,6 @@
 		,{field:'createDateTime', title: '创建时间', width:140 ,style:'font-size: 12px;'}
 		,{field:'updateDateTime', title: '修改时间', width:140 ,style:'font-size: 12px;'}
 
-		,{fixed:'right', width:120,title: '收藏',  toolbar: '#great_bar'}
 		,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
 	];
 	layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
@@ -182,22 +197,19 @@
 		});
 
 		//监听工具条 table_bar
-		table.on('tool(table)', function(obj) { //注：tool是工具条事件名，table是table原始容器的属性 lay-filter="对应的值"
-			let data = obj.data; //获得当前行数据
-			let layEvent = obj.event; //获得 lay-event 对应的值
+		table.on('tool(table)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			var data = obj.data //获得当前行数据
+					, layEvent = obj.event; //获得 lay-event 对应的值
 			if (layEvent === 'edit') {
 				edit(data.id);
-			}else if(layEvent === 'great'){
-				let elem = obj.tr;
-				greatOper(elem, data.id);
 			}
 		});
-
 		//监听单元格编辑
 		table.on('edit(table)', function(obj){
 			var value = obj.value //得到修改后的值
 					,data = obj.data //得到所在行所有键值
 					,field = obj.field; //得到字段  orderNo  name
+			//layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
 			table_edit_update(data.id,field,value);
 		});
 
