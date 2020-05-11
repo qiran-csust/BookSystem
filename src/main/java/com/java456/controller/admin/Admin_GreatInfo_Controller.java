@@ -77,7 +77,7 @@ public class Admin_GreatInfo_Controller {
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
 
         GreatInfo greatInfo = greatInfoService.selectByCouponIdUserId(couponsId, user.getId());
-        if(greatInfo != null){
+        if(greatInfo == null){
             Integer count = greatInfoService.deleteGreatInfoById(couponsId, user.getId());
             if(count > 0){
                 // 取消收藏成功
