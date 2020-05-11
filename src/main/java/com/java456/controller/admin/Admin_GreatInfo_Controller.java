@@ -43,6 +43,7 @@ public class Admin_GreatInfo_Controller {
             // 判断是否已经收藏
             GreatInfo greatInfo = greatInfoService.selectByCouponIdUserId(couponsId, user.getId());
             if(greatInfo == null){
+                greatInfo = new GreatInfo();
                 greatInfo.setCouponsId(couponsId);
                 greatInfo.setUserId(user.getId());
                 greatInfo.setCreateTime(new Date());
@@ -77,7 +78,7 @@ public class Admin_GreatInfo_Controller {
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
 
         GreatInfo greatInfo = greatInfoService.selectByCouponIdUserId(couponsId, user.getId());
-        if(greatInfo == null){
+        if(greatInfo != null){
             Integer count = greatInfoService.deleteGreatInfoById(couponsId, user.getId());
             if(count > 0){
                 // 取消收藏成功
