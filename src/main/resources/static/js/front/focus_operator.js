@@ -7,9 +7,9 @@
 function checkFocus(typeName) {
     $.post("/admin/focus/info/checkFocus", {"typeName": typeName},
         function (result) {
-            if(result.res == true){
+            if(result.res === true){
                 // 表示当前类型已被关注，则显示“已关注按钮”
-                $('#cancelFocus').show().attr("focusId", focusId);
+                $('#cancelFocus').show().attr("focusId", result.focusId);
             }else{
                 // 表示未被关注，则显示“关注”按钮
                 $('#focusIt').show();

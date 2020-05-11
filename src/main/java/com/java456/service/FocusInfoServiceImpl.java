@@ -41,7 +41,13 @@ public class FocusInfoServiceImpl implements FocusInfoService {
 
     @Override
     public Integer deleteFocusInfo(FocusInfo focusInfo) {
-        focusInfoDao.delete(focusInfo);
-        return 1;
+        int count = 0;
+        try{
+            focusInfoDao.delete(focusInfo);
+            count =1;
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return count;
     }
 }
