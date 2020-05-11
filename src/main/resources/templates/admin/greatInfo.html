@@ -35,7 +35,7 @@
             {icon: 3, title: '提示'},
             function (index) {
 
-            $.post('/admin/great/info/cancelGreat', {'greatId': id}, function (result) {
+            $.post('/admin/great/info/cancelGreat', {'couponsId': id}, function (result) {
                 if(result.success){
                     layer.msg('取消收藏成功！');
                     reload_data();

@@ -7,6 +7,7 @@ import com.java456.service.GreatInfoService;
 import com.java456.service.MessageService;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,16 +40,23 @@ public class Admin_GreatInfo_Controller {
         // 根据用户id和typeID获取关注信息
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
         if(couponsId != null){
-            GreatInfo greatInfo = new GreatInfo();
-            greatInfo.setCouponsId(couponsId);
-            greatInfo.setUserId(user.getId());
-            greatInfo.setCreateTime(new Date());
-
-            // 将数据保存到数据库中
-            GreatInfo save = greatInfoService.addGreatInfo(greatInfo);
-            if(save != null){
+            // 判断是否已经收藏
+            GreatInfo greatInfo = greatInfoService.selectByCouponIdUserId(couponsId, user.getId());
+            if(greatInfo == null){
+                greatInfo.setCouponsId(couponsId);
+                greatInfo.setUserId(user.getId());
+                greatInfo.setCreateTime(new Date());
+                // 将数据保存到数据库中
+                GreatInfo save = greatInfoService.addGreatInfo(greatInfo);
+                if(save != null){
+                    result.put("success", true);
+                    result.put("couponsId", save.getId());
+                    return result;
+                }
+            }else{
+                // 已经收藏过了，直接返回收藏成功
                 result.put("success", true);
-                result.put("couponsId", save.getId());
+                result.put("couponsId", greatInfo.getId());
                 return result;
             }
         }
@@ -60,14 +68,17 @@ public class Admin_GreatInfo_Controller {
     /**
      * /admin/great/info/cancelGreat
      * 取消收藏的优惠信息
-     * @param greatId
+     * @param couponsId
      */
     @PostMapping(value = "/cancelGreat")
-    public JSONObject cancelGreat(Integer greatId){
+    @Transactional
+    public JSONObject cancelGreat(Integer couponsId){
         JSONObject result = new JSONObject();
-        GreatInfo greatInfo = greatInfoService.getGreatInfoById(greatId);
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+
+        GreatInfo greatInfo = greatInfoService.selectByCouponIdUserId(couponsId, user.getId());
         if(greatInfo != null){
-            Integer count = greatInfoService.deleteGreatInfo(greatInfo.getId());
+            Integer count = greatInfoService.deleteGreatInfoById(couponsId, user.getId());
             if(count > 0){
                 // 取消收藏成功
                 result.put("success", true);

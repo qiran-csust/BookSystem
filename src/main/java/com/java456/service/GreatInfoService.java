@@ -7,6 +7,8 @@ public interface GreatInfoService {
 
     Integer deleteGreatInfo(Integer id);
 
+    Integer deleteGreatInfoById(Integer couponId, Integer userId);
+
     GreatInfo getGreatInfoById(Integer id);
 
     GreatInfo selectByCouponIdUserId(Integer couponId, Integer userId);

@@ -33,6 +33,12 @@ public class GreatInfoServiceImpl implements GreatInfoService {
     }
 
     @Override
+    public Integer deleteGreatInfoById(Integer couponId, Integer userId) {
+        int count = greatInfoDao.deleteGreatInfoById(couponId, userId);
+        return count;
+    }
+
+    @Override
     public GreatInfo getGreatInfoById(Integer id) {
         GreatInfo greatInfo = greatInfoDao.getGreatInfoById(id);
         return greatInfo;
